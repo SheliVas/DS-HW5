@@ -60,13 +60,42 @@ public static void radixSort(int[] array, int base) {
 
   // Insertion Sort Test
   public static void testInsertionSort() {
-    Integer[] array = {5, 2, 9, 1, 7};
+    Integer[] array1 = {5, 2, 9, 1, 7};
+    Integer[] array2 = {1, 2, 3, 4, 5};
+    Integer[] array3 = {5, 4, 3, 2, 1};
+    Integer[] array4 = {2, 4, 6, 8, 10};
+    Integer[] array5 = {10, 8, 6, 4, 2};
+    Integer[] array6 = {1};
+    Integer[] array7 = {};
+
     Sort<Integer> sorter = new Sort<>();
-    
-    System.out.println("Before sorting: " + Arrays.toString(array));
-    
-    sorter.insertionSort(array, 0, array.length - 1);
-    
-    System.out.println("After sorting: " + Arrays.toString(array));
+
+    System.out.println("Before sorting: " + Arrays.toString(array1));
+    sorter.insertionSort(array1, 0, array1.length - 1);
+    System.out.println("After sorting: " + Arrays.toString(array1));
+
+    System.out.println("Before sorting: " + Arrays.toString(array2));
+    sorter.insertionSort(array2, 0, array2.length - 1);
+    System.out.println("After sorting: " + Arrays.toString(array2));
+
+    System.out.println("Before sorting: " + Arrays.toString(array3));
+    sorter.insertionSort(array3, 0, array3.length - 1);
+    System.out.println("After sorting: " + Arrays.toString(array3));
+
+    System.out.println("Before sorting: " + Arrays.toString(array4));
+    sorter.insertionSort(array4, 0, array4.length - 1);
+    System.out.println("After sorting: " + Arrays.toString(array4));
+
+    System.out.println("Before sorting: " + Arrays.toString(array5));
+    sorter.insertionSort(array5, 0, array5.length - 1);
+    System.out.println("After sorting: " + Arrays.toString(array5));
+
+    System.out.println("Before sorting: " + Arrays.toString(array6));
+    sorter.insertionSort(array6, 0, array6.length - 1);
+    System.out.println("After sorting: " + Arrays.toString(array6));
+
+    System.out.println("Before sorting: " + Arrays.toString(array7));
+    sorter.insertionSort(array7, 0, array7.length - 1);
+    System.out.println("After sorting: " + Arrays.toString(array7));
 }
 }
