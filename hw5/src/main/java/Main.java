@@ -3,7 +3,14 @@ public class Main {
         System.out.println("Starting...");
         
 
-         // Call the testInsertionSort method
-         Sort.testInsertionSort();
+        System.out.println("Testing InsertionSort:");
+        Sort.testInsertionSort();
+        System.out.println();
+        
+        
+        System.out.println("Testing QuickSort:");
+        Sort.testQuickSort();
+        System.out.println();
+
     }
 }
