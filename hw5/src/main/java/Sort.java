@@ -98,4 +98,6 @@ public static void radixSort(int[] array, int base) {
     sorter.insertionSort(array7, 0, array7.length - 1);
     System.out.println("After sorting: " + Arrays.toString(array7));
 }
+
+// comment
 }
