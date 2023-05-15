@@ -142,14 +142,7 @@ public class Sort<T extends Comparable<T>> {
         System.arraycopy(mergedArray, low, array, low, high - low + 1);
     }
 
-
-
     public void mergeSortIterative(T[] array) {
-
-        if (array.length <= 1) {
-            return; // Array of size 1 or less is already sorted
-        }
-
         int n = array.length;
         T[] tempArray = Arrays.copyOf(array, n);
         T[] source = array;
@@ -160,22 +153,25 @@ public class Sort<T extends Comparable<T>> {
                 int mid = Math.min(leftStart + currSize - 1, n - 1);
                 int rightEnd = Math.min(leftStart + 2 * currSize - 1, n - 1);
 
-                merge(source, destination, leftStart, mid, rightEnd);
+                if (mid < rightEnd) {
+                    mergeI(source, destination, leftStart, mid, rightEnd);
+                }
             }
 
-            // Swap source and destination arrays
+            // Swap the source and destination arrays
             T[] temp = source;
             source = destination;
             destination = temp;
         }
 
-        // Copy the sorted elements from the source array back to the original array
-        if (array != source) {
-            System.arraycopy(source, 0, array, 0, n);
+        // If the last merge was performed on the tempArray, copy the sorted elements
+        // back to the original array
+        if (source == tempArray) {
+            System.arraycopy(tempArray, 0, array, 0, n);
         }
     }
 
-    private void merge(T[] source, T[] destination, int leftStart, int mid, int rightEnd) {
+    private void mergeI(T[] source, T[] destination, int leftStart, int mid, int rightEnd) {
         int leftIndex = leftStart;
         int rightIndex = mid + 1;
         int mergedIndex = leftStart;
@@ -309,33 +305,33 @@ public class Sort<T extends Comparable<T>> {
     }
 
     // Recursive MergeSort Test
-    
-     public static void testRecursiveMergeSort() {
+
+    public static void testRecursiveMergeSort() {
         Sort<Integer> sorter = new Sort<>();
 
         // Test case 1: Array with random elements
-        Integer[] array1 = {5, 2, 9, 1, 7};
+        Integer[] array1 = { 5, 2, 9, 1, 7 };
         System.out.println("Before sorting: " + Arrays.toString(array1));
         sorter.mergeSortRecursive(array1);
         System.out.println("After sorting: " + Arrays.toString(array1));
         // Expected output: [1, 2, 5, 7, 9]
 
         // Test case 2: Array with duplicate elements
-        Integer[] array2 = {10, 4, 8, 3, 6, 4, 8};
+        Integer[] array2 = { 10, 4, 8, 3, 6, 4, 8 };
         System.out.println("Before sorting: " + Arrays.toString(array2));
         sorter.mergeSortRecursive(array2);
         System.out.println("After sorting: " + Arrays.toString(array2));
         // Expected output: [3, 4, 4, 6, 8, 8, 10]
 
         // Test case 3: Array with already sorted elements
-        Integer[] array3 = {1, 2, 3, 4, 5};
+        Integer[] array3 = { 1, 2, 3, 4, 5 };
         System.out.println("Before sorting: " + Arrays.toString(array3));
         sorter.mergeSortRecursive(array3);
         System.out.println("After sorting: " + Arrays.toString(array3));
         // Expected output: [1, 2, 3, 4, 5]
 
         // Test case 4: Array with descending order elements
-        Integer[] array4 = {9, 8, 7, 6, 5, 4, 3, 2, 1};
+        Integer[] array4 = { 9, 8, 7, 6, 5, 4, 3, 2, 1 };
         System.out.println("Before sorting: " + Arrays.toString(array4));
         sorter.mergeSortRecursive(array4);
         System.out.println("After sorting: " + Arrays.toString(array4));
@@ -349,35 +345,59 @@ public class Sort<T extends Comparable<T>> {
         // Expected output: []
 
         // Test case 6: Array with a single element
-        Integer[] array6 = {1};
+        Integer[] array6 = { 1 };
         System.out.println("Before sorting: " + Arrays.toString(array6));
         sorter.mergeSortRecursive(array6);
         System.out.println("After sorting: " + Arrays.toString(array6));
         // Expected output: [1]
     }
 
-
     // Iterative MergeSort Test
     public static void testIterativeMergeSort() {
         Sort<Integer> sorter = new Sort<>();
 
-        // Test case 1
-        Integer[] array1 = { 5, 2, 9, 1, 7 };
-        System.out.println("Original array: " + Arrays.toString(array1));
-        sorter.mergeSortIterative(array1);
-        System.out.println("Sorted array: " + Arrays.toString(array1));
-
-        // Test case 2
-        Integer[] array2 = { 10, 4, 8, 3, 6 };
-        System.out.println("Original array: " + Arrays.toString(array2));
-        sorter.mergeSortIterative(array2);
-        System.out.println("Sorted array: " + Arrays.toString(array2));
-
-        // Test case 3
-        Integer[] array3 = { 1, 2, 3, 4, 5 };
-        System.out.println("Original array: " + Arrays.toString(array3));
-        sorter.mergeSortIterative(array3);
-        System.out.println("Sorted array: " + Arrays.toString(array3));
+        // Test case 1: Array with random elements
+        Integer[] arr1 = {5, 2, 9, 1, 7};
+        System.out.println("Before sorting: " + Arrays.toString(arr1));
+        sorter.mergeSortIterative(arr1);
+        System.out.println("After sorting: " + Arrays.toString(arr1));
+        // Expected output: [1, 2, 5, 7, 9]
+    
+        // Test case 2: Array with duplicate elements
+        Integer[] arr2 = {10, 4, 8, 3, 6, 4, 8};
+        System.out.println("Before sorting: " + Arrays.toString(arr2));
+        sorter.mergeSortIterative(arr2);
+        System.out.println("After sorting: " + Arrays.toString(arr2));
+        // Expected output: [3, 4, 4, 6, 8, 8, 10]
+    
+        // Test case 3: Array with already sorted elements
+        Integer[] arr3 = {1, 2, 3, 4, 5};
+        System.out.println("Before sorting: " + Arrays.toString(arr3));
+        sorter.mergeSortIterative(arr3);
+        System.out.println("After sorting: " + Arrays.toString(arr3));
+        // Expected output: [1, 2, 3, 4, 5]
+    
+        // Test case 4: Array with descending order elements
+        Integer[] arr4 = {9, 8, 7, 6, 5, 4, 3, 2, 1};
+        System.out.println("Before sorting: " + Arrays.toString(arr4));
+        sorter.mergeSortIterative(arr4);
+        System.out.println("After sorting: " + Arrays.toString(arr4));
+        // Expected output: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    
+        // Test case 5: Empty array
+        Integer[] arr5 = {};
+        System.out.println("Before sorting: " + Arrays.toString(arr5));
+        sorter.mergeSortIterative(arr5);
+        System.out.println("After sorting: " + Arrays.toString(arr5));
+        // Expected output: []
+    
+        // Test case 6: Array with a single element
+        Integer[] arr6 = {1};
+        System.out.println("Before sorting: " + Arrays.toString(arr6));
+        sorter.mergeSortIterative(arr6);
+        System.out.println("After sorting: " + Arrays.toString(arr6));
+        // Expected output: [1]
     }
+    
 
 }
