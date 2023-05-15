@@ -11,6 +11,14 @@ public class Main {
         System.out.println("Testing QuickSort:");
         Sort.testQuickSort();
         System.out.println();
+        
+        System.out.println("Testing Recursive MergeSort:");
+        Sort.testRecursiveMergeSort();
+        System.out.println();
+       
+        System.out.println("Testing iterative MergeSort:");
+        Sort.testIterativeMergeSort();
+        System.out.println();
 
     }
 }
