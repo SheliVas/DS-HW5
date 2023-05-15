@@ -8,8 +8,12 @@ public class Main {
         System.out.println();
         
         
-        System.out.println("Testing QuickSort:");
-        Sort.testQuickSort();
+        System.out.println("Testing QuickSortLec:");
+        Sort.testQuickSortLec();
+        System.out.println();
+        
+        System.out.println("Testing QuickSortRec:");
+        Sort.testQuickSortRec();
         System.out.println();
         
         System.out.println("Testing Recursive MergeSort:");
@@ -23,3 +27,4 @@ public class Main {
        
     }
 }
+
