@@ -1,16 +1,25 @@
 import java.util.Arrays;
-import java.lang.reflect.Array;
 
 public class Sort<T extends Comparable<T>> {
 
     private T[] mergedArray; // Temporary array for merging - used in mergeSort
+    private int naiveSortThreshold; // Threshold for using naive sorting algorithms
+
+    /**
+     * Sets the threshold for using naive sorting algorithms.
+     *
+     * @param threshold the threshold value
+     */
+    public void setNaiveSortThreshold(int threshold) {
+        naiveSortThreshold = threshold;
+    }
 
     /**
      * Sorts the given array using the QuickSort algorithm.
      *
      * @param array the array to be sorted
      */
-    public void quickSort(T[] array) {
+    public void quickSortClass(T[] array) {
         quickSortLec(array, 0, array.length - 1);
     }
 
@@ -23,7 +32,7 @@ public class Sort<T extends Comparable<T>> {
      * @param high  the ending index of the subarray
      */
     private void quickSortLec(T[] array, int low, int high) {
-        if (high - low > 2) {
+        if (high - low > naiveSortThreshold) {
             int pivot = partitionLec(array, low, high);
             quickSortLec(array, low, pivot - 1);
             quickSortLec(array, pivot + 1, high);
@@ -75,7 +84,7 @@ public class Sort<T extends Comparable<T>> {
      */
     private void quickSortRec(T[] array, int low, int high) {
         if (low < high) {
-            if (high - low >= 2) {
+            if (high - low >= naiveSortThreshold) {
                 int pivot = partitionRec(array, low, high);
                 quickSortRec(array, low, pivot - 1);
                 quickSortRec(array, pivot + 1, high);
@@ -85,7 +94,6 @@ public class Sort<T extends Comparable<T>> {
         }
     }
 
-    // this is the recitation version!
     /**
      * Partitions the array around a pivot element for the QuickSort algorithm.
      *
@@ -147,7 +155,7 @@ public class Sort<T extends Comparable<T>> {
     }
 
     private void mergeSortRecursive(T[] array, int low, int high) {
-        if (high - low <= 10) {
+        if (high - low <= naiveSortThreshold) {
             insertionSort(array, low, high);
         } else {
             int mid = low + (high - low) / 2;
@@ -245,30 +253,41 @@ public class Sort<T extends Comparable<T>> {
             mergedIndex++;
         }
 
+        // Copy the merged elements back to the source array
+        System.arraycopy(destination, leftStart, source, leftStart, rightEnd - leftStart + 1);
     }
 
     // -------------------------------- RadixSort ----------------------
 
-    public static void radixSort(int[] array, int base) {
-        // Implementation goes here
-    }
-
-    // counting sort
     /**
-     * Sorts the given array using the counting sort algorithm.
+     * Sorts an array of integers using Radix Sort algorithm.
+     * The sorting is performed in non-decreasing order.
      *
      * @param array the array to be sorted
-     * @param k     the range of elements in the array (max - min + 1)
+     * @param base  the base used for representing the numbers (e.g., 10 for
+     *              decimal, 2 for binary, 16 for hexadecimal)
      */
-    public void countingSort(int[] array, int k) {
-        int n = array.length;
-        // If the array has 0 or 1 element, it is already sorted
-        if (n <= 1) {
-            return;
+    public static void radixSort(int[] array, int base) {
+        int max = getMax(array);
+
+        // Apply counting sort for each digit
+        for (int exp = 1; max / exp > 0; exp *= base) {
+            countingSort(array, exp);
         }
-        // Find the minimum and maximum values in the array
+    }
+
+    /**
+     * Performs counting sort on the given array based on the specified exponent.
+     *
+     * @param array the array to be sorted
+     * @param exp   the exponent value indicating the current digit being considered
+     */
+    private static void countingSort(int[] array, int exp) {
+        int n = array.length;
         int min = array[0];
         int max = array[0];
+
+        // Find the minimum and maximum values in the array
         for (int i = 1; i < n; i++) {
             if (array[i] < min) {
                 min = array[i];
@@ -276,7 +295,8 @@ public class Sort<T extends Comparable<T>> {
                 max = array[i];
             }
         }
-         // Calculate the range of values (for handeling negative and non standard values)
+
+        // Calculate the range of values
         int range = max - min + 1;
         int[] count = new int[range];
         int[] output = new int[n];
@@ -295,6 +315,27 @@ public class Sort<T extends Comparable<T>> {
         }
 
         System.arraycopy(output, 0, array, 0, n);
+    }
+
+    /**
+     * Finds the maximum value in the given array.
+     *
+     * @param array the array to find the maximum value from
+     * @return the maximum value in the array, or Integer.MIN_VALUE if the array is
+     *         empty
+     */
+    private static int getMax(int[] array) {
+        if (array.length == 0) {
+            return Integer.MIN_VALUE;
+        }
+
+        int max = array[0];
+        for (int i = 1; i < array.length; i++) {
+            if (array[i] > max) {
+                max = array[i];
+            }
+        }
+        return max;
     }
 
     // --------------------------------- TESTING SECTION
@@ -352,42 +393,42 @@ public class Sort<T extends Comparable<T>> {
         // Test case 1: Empty array
         Integer[] array1 = {};
         System.out.println("Before sorting: " + Arrays.toString(array1));
-        sorter.quickSort(array1);
+        sorter.quickSortClass(array1);
         System.out.println("After sorting: " + Arrays.toString(array1));
         // Expected output: []
 
         // Test case 2: Array with a single element
         Integer[] array2 = { 5 };
         System.out.println("Before sorting: " + Arrays.toString(array2));
-        sorter.quickSort(array2);
+        sorter.quickSortClass(array2);
         System.out.println("After sorting: " + Arrays.toString(array2));
         // Expected output: [5]
 
         // Test case 3: Array with repeated elements
         Integer[] array3 = { 5, 2, 9, 2, 7, 5 };
         System.out.println("Before sorting: " + Arrays.toString(array3));
-        sorter.quickSort(array3);
+        sorter.quickSortClass(array3);
         System.out.println("After sorting: " + Arrays.toString(array3));
         // Expected output: [2, 2, 5, 5, 7, 9]
 
         // Test case 4: Array already sorted in descending order
         Integer[] array4 = { 9, 7, 5, 3, 1 };
         System.out.println("Before sorting: " + Arrays.toString(array4));
-        sorter.quickSort(array4);
+        sorter.quickSortClass(array4);
         System.out.println("After sorting: " + Arrays.toString(array4));
         // Expected output: [1, 3, 5, 7, 9]
 
         // Test case 5: Array with negative numbers
         Integer[] array5 = { -5, 2, -9, 1, -7 };
         System.out.println("Before sorting: " + Arrays.toString(array5));
-        sorter.quickSort(array5);
+        sorter.quickSortClass(array5);
         System.out.println("After sorting: " + Arrays.toString(array5));
         // Expected output: [-9, -7, -5, 1, 2]
 
         // Test case 6: Array with large number of elements
         Integer[] array6 = { 9, 2, 5, 1, 7, 4, 8, 3, 6 };
         System.out.println("Before sorting: " + Arrays.toString(array6));
-        sorter.quickSort(array6);
+        sorter.quickSortClass(array6);
         System.out.println("After sorting: " + Arrays.toString(array6));
         // Expected output: [1, 2, 3, 4, 5, 6, 7, 8, 9]
     }
@@ -533,7 +574,7 @@ public class Sort<T extends Comparable<T>> {
         // Expected output: [1]
     }
 
-    // test counting sort
+    // counting sort test
     public static void testCountingSort() {
         // Test case 1: Empty array
         int[] array1 = {};
@@ -570,6 +611,97 @@ public class Sort<T extends Comparable<T>> {
         sorter.countingSort(array5, 0);
         System.out.println("After sorting: " + Arrays.toString(array5));
         // Expected output: [-9, -7, -5, -2, -1]
+    }
+
+    // radixSort test
+
+    // public static void testRadixSort() {
+
+    // // Test case 1: Empty array
+    // int[] array1 = {};
+    // System.out.println("Before sorting: " + Arrays.toString(array1));
+    // radixSort(array1, 10);
+    // System.out.println("After sorting: " + Arrays.toString(array1));
+    // // Expected output: []
+
+    // // Test case 2: Array with a single element
+    // int[] array2 = { 5 };
+    // System.out.println("Before sorting: " + Arrays.toString(array2));
+    // radixSort(array2, 10);
+    // System.out.println("After sorting: " + Arrays.toString(array2));
+    // // Expected output: [5]
+
+    // // Test case 3: Array with multiple elements
+    // int[] array3 = { 9, 7, 5, 3, 1 };
+    // System.out.println("Before sorting: " + Arrays.toString(array3));
+    // radixSort(array3, 10);
+    // System.out.println("After sorting: " + Arrays.toString(array3));
+    // // Expected output: [1, 3, 5, 7, 9]
+
+    // // Test case 4: Array with negative values
+    // int[] array4 = { -5, 2, -9, 1, -7 };
+    // System.out.println("Before sorting: " + Arrays.toString(array4));
+    // radixSort(array4, 10);
+    // System.out.println("After sorting: " + Arrays.toString(array4));
+    // // Expected output: [-9, -7, -5, 1, 2]
+
+    // // Test case 5: Array with duplicate values
+    // int[] array5 = { 9, 2, 5, 1, 7, 4, 8, 3, 6 };
+    // System.out.println("Before sorting: " + Arrays.toString(array5));
+    // radixSort(array5, 10);
+    // System.out.println("After sorting: " + Arrays.toString(array5));
+    // // Expected output: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    // }
+
+    public static void testRadixSort() {
+        // Test case 1: Empty array
+        int[] array1 = {};
+        System.out.println("Before sorting: " + Arrays.toString(array1));
+        radixSort(array1, 10);
+        System.out.println("After sorting: " + Arrays.toString(array1));
+        // Expected output: []
+
+        // Test case 2: Array with a single element
+        int[] array2 = { 5 };
+        System.out.println("Before sorting: " + Arrays.toString(array2));
+        radixSort(array2, 10);
+        System.out.println("After sorting: " + Arrays.toString(array2));
+        // Expected output: [5]
+
+        // Test case 3: Array with multiple elements (base 10)
+        int[] array3 = { 9, 7, 5, 3, 1 };
+        System.out.println("Before sorting: " + Arrays.toString(array3));
+        radixSort(array3, 10);
+        System.out.println("After sorting: " + Arrays.toString(array3));
+        // Expected output: [1, 3, 5, 7, 9]
+
+        // Test case 4: Array with negative values (base 10)
+        int[] array4 = { -5, 2, -9, 1, -7 };
+        System.out.println("Before sorting: " + Arrays.toString(array4));
+        radixSort(array4, 10);
+        System.out.println("After sorting: " + Arrays.toString(array4));
+        // Expected output: [-9, -7, -5, 1, 2]
+
+        // Test case 5: Array with duplicate values (base 10)
+        int[] array5 = { 9, 2, 5, 1, 7, 4, 8, 3, 6 };
+        System.out.println("Before sorting: " + Arrays.toString(array5));
+        radixSort(array5, 10);
+        System.out.println("After sorting: " + Arrays.toString(array5));
+        // Expected output: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+        // Test case 6: Array with multiple elements (base 2)
+        int[] array6 = { 9, 7, 5, 3, 1 };
+        System.out.println("Before sorting: " + Arrays.toString(array6));
+        radixSort(array6, 2);
+        System.out.println("After sorting: " + Arrays.toString(array6));
+        // Expected output: [1, 3, 5, 7, 9]
+
+        // Test case 7: Array with multiple elements (base 16)
+        int[] array7 = { 9, 7, 15, 3, 1 };
+        System.out.println("Before sorting: " + Arrays.toString(array7));
+        radixSort(array7, 16);
+        System.out.println("After sorting: " + Arrays.toString(array7));
+        // Expected output: [1, 3, 7, 9, 15]
     }
 
 }
