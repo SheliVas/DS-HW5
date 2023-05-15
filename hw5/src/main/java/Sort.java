@@ -1,6 +1,9 @@
 import java.util.Arrays;
+import java.lang.reflect.Array;
 
 public class Sort<T extends Comparable<T>> {
+
+    private T[] mergedArray; // Temporary array for merging - used in mergeSort
 
     /**
      * Sorts the given array using the QuickSort algorithm.
@@ -94,51 +97,102 @@ public class Sort<T extends Comparable<T>> {
 
     // ---------------------------------------------- MergeSort--------------------
 
+    // public void mergeSortRecursive(T[] array) {
+    // mergedArray = Arrays.copyOf(array, array.length);
+    // mergeSortRecursive(array, 0, array.length - 1);
+    // }
+
+    // private void mergeSortRecursive(T[] array, int low, int high) {
+    // if (high - low <= 2) {
+    // insertionSort(array, low, high); //preform insertion sort for 2 elements or
+    // less
+    // } else {
+    // int mid = low + (high - low) / 2;
+    // mergeSortRecursive(array, low, mid);
+    // mergeSortRecursive(array, mid + 1, high);
+
+    // // Optimize by checking if merging is necessary
+    // if (array[mid].compareTo(array[mid + 1]) > 0) {
+    // merge(array, low, mid, high);
+    // }
+    // }
+    // }
+
+    // private void merge(T[] array, int low, int mid, int high) {
+    // int leftIndex = low;
+    // int rightIndex = mid + 1;
+
+    // // Skip merging if the subarrays are already in the correct order
+    // if (array[mid].compareTo(array[rightIndex]) <= 0) {
+    // return;
+    // }
+
+    // while (leftIndex <= mid && rightIndex <= high) {
+    // if (array[leftIndex].compareTo(array[rightIndex]) <= 0) {
+    // leftIndex++;
+    // } else {
+    // T temp = array[rightIndex];
+
+    // // Shift elements from leftIndex to right by one position
+    // for (int i = rightIndex - 1; i >= leftIndex; i--) {
+    // array[i + 1] = array[i];
+    // }
+
+    // array[leftIndex] = temp;
+
+    // leftIndex++;
+    // mid++;
+    // rightIndex++;
+    // }
+    // }
+    // }
+
     public void mergeSortRecursive(T[] array) {
-
-        if (array.length <= 1) {
-            return; // Array of size 1 or less is already sorted
-        }
-
-        int mid = array.length / 2;
-        T[] leftArray = Arrays.copyOfRange(array, 0, mid);
-        T[] rightArray = Arrays.copyOfRange(array, mid, array.length);
-
-        mergeSortRecursive(leftArray);
-        mergeSortRecursive(rightArray);
-
-        merge(array, leftArray, rightArray);
+        mergedArray = Arrays.copyOf(array, array.length);
+        mergeSortRecursive(array, 0, array.length - 1);
     }
 
-    private void merge(T[] array, T[] leftArray, T[] rightArray) {
-        int leftIndex = 0;
-        int rightIndex = 0;
-        int mergedIndex = 0;
+    private void mergeSortRecursive(T[] array, int low, int high) {
+        if (high - low <= 10) {
+            insertionSort(array, low, high);
+        } else {
+            int mid = low + (high - low) / 2;
+            mergeSortRecursive(array, low, mid);
+            mergeSortRecursive(array, mid + 1, high);
 
-        while (leftIndex < leftArray.length && rightIndex < rightArray.length) {
-            if (leftArray[leftIndex].compareTo(rightArray[rightIndex]) <= 0) {
-                array[mergedIndex] = leftArray[leftIndex];
-                leftIndex++;
-            } else {
-                array[mergedIndex] = rightArray[rightIndex];
-                rightIndex++;
+            // Optimize by checking if merging is necessary
+            if (array[mid].compareTo(array[mid + 1]) > 0) {
+                mergeR(array, low, mid, high);
             }
-            mergedIndex++;
         }
-
-        while (leftIndex < leftArray.length) {
-            array[mergedIndex] = leftArray[leftIndex];
-            leftIndex++;
-            mergedIndex++;
-        }
-
-        while (rightIndex < rightArray.length) {
-            array[mergedIndex] = rightArray[rightIndex];
-            rightIndex++;
-            mergedIndex++;
-        }
-
     }
+
+    private void mergeR(T[] array, int low, int mid, int high) {
+        int leftIndex = low;
+        int rightIndex = mid + 1;
+        int mergedIndex = low;
+
+        while (leftIndex <= mid && rightIndex <= high) {
+            if (array[leftIndex].compareTo(array[rightIndex]) <= 0) {
+                mergedArray[mergedIndex++] = array[leftIndex++];
+            } else {
+                mergedArray[mergedIndex++] = array[rightIndex++];
+            }
+        }
+
+        while (leftIndex <= mid) {
+            mergedArray[mergedIndex++] = array[leftIndex++];
+        }
+
+        while (rightIndex <= high) {
+            mergedArray[mergedIndex++] = array[rightIndex++];
+        }
+
+        // Copy merged elements back to the original array
+        System.arraycopy(mergedArray, low, array, low, high - low + 1);
+    }
+
+
 
     public void mergeSortIterative(T[] array) {
 
@@ -305,26 +359,53 @@ public class Sort<T extends Comparable<T>> {
     }
 
     // Recursive MergeSort Test
-    public static void testRecursiveMergeSort() {
+    
+     public static void testRecursiveMergeSort() {
         Sort<Integer> sorter = new Sort<>();
-        // Test case 1
-        Integer[] array1 = { 5, 2, 9, 1, 7 };
-        System.out.println("Original array: " + Arrays.toString(array1));
+
+        // Test case 1: Array with random elements
+        Integer[] array1 = {5, 2, 9, 1, 7};
+        System.out.println("Before sorting: " + Arrays.toString(array1));
         sorter.mergeSortRecursive(array1);
-        System.out.println("Sorted array: " + Arrays.toString(array1));
+        System.out.println("After sorting: " + Arrays.toString(array1));
+        // Expected output: [1, 2, 5, 7, 9]
 
-        // Test case 2
-        Integer[] array2 = { 10, 4, 8, 3, 6 };
-        System.out.println("Original array: " + Arrays.toString(array2));
+        // Test case 2: Array with duplicate elements
+        Integer[] array2 = {10, 4, 8, 3, 6, 4, 8};
+        System.out.println("Before sorting: " + Arrays.toString(array2));
         sorter.mergeSortRecursive(array2);
-        System.out.println("Sorted array: " + Arrays.toString(array2));
+        System.out.println("After sorting: " + Arrays.toString(array2));
+        // Expected output: [3, 4, 4, 6, 8, 8, 10]
 
-        // Test case 3
-        Integer[] array3 = { 1, 2, 3, 4, 5 };
-        System.out.println("Original array: " + Arrays.toString(array3));
+        // Test case 3: Array with already sorted elements
+        Integer[] array3 = {1, 2, 3, 4, 5};
+        System.out.println("Before sorting: " + Arrays.toString(array3));
         sorter.mergeSortRecursive(array3);
-        System.out.println("Sorted array: " + Arrays.toString(array3));
+        System.out.println("After sorting: " + Arrays.toString(array3));
+        // Expected output: [1, 2, 3, 4, 5]
+
+        // Test case 4: Array with descending order elements
+        Integer[] array4 = {9, 8, 7, 6, 5, 4, 3, 2, 1};
+        System.out.println("Before sorting: " + Arrays.toString(array4));
+        sorter.mergeSortRecursive(array4);
+        System.out.println("After sorting: " + Arrays.toString(array4));
+        // Expected output: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+        // Test case 5: Empty array
+        Integer[] array5 = {};
+        System.out.println("Before sorting: " + Arrays.toString(array5));
+        sorter.mergeSortRecursive(array5);
+        System.out.println("After sorting: " + Arrays.toString(array5));
+        // Expected output: []
+
+        // Test case 6: Array with a single element
+        Integer[] array6 = {1};
+        System.out.println("Before sorting: " + Arrays.toString(array6));
+        sorter.mergeSortRecursive(array6);
+        System.out.println("After sorting: " + Arrays.toString(array6));
+        // Expected output: [1]
     }
+
 
     // Iterative MergeSort Test
     public static void testIterativeMergeSort() {

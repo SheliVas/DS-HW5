@@ -20,8 +20,6 @@ public class Main {
         Sort.testIterativeMergeSort();
         System.out.println();
 
-
-        // testing sheli-branch
-        // testing gal-branch
+       
     }
 }
