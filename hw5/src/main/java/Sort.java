@@ -97,56 +97,6 @@ public class Sort<T extends Comparable<T>> {
 
     // ---------------------------------------------- MergeSort--------------------
 
-    // public void mergeSortRecursive(T[] array) {
-    // mergedArray = Arrays.copyOf(array, array.length);
-    // mergeSortRecursive(array, 0, array.length - 1);
-    // }
-
-    // private void mergeSortRecursive(T[] array, int low, int high) {
-    // if (high - low <= 2) {
-    // insertionSort(array, low, high); //preform insertion sort for 2 elements or
-    // less
-    // } else {
-    // int mid = low + (high - low) / 2;
-    // mergeSortRecursive(array, low, mid);
-    // mergeSortRecursive(array, mid + 1, high);
-
-    // // Optimize by checking if merging is necessary
-    // if (array[mid].compareTo(array[mid + 1]) > 0) {
-    // merge(array, low, mid, high);
-    // }
-    // }
-    // }
-
-    // private void merge(T[] array, int low, int mid, int high) {
-    // int leftIndex = low;
-    // int rightIndex = mid + 1;
-
-    // // Skip merging if the subarrays are already in the correct order
-    // if (array[mid].compareTo(array[rightIndex]) <= 0) {
-    // return;
-    // }
-
-    // while (leftIndex <= mid && rightIndex <= high) {
-    // if (array[leftIndex].compareTo(array[rightIndex]) <= 0) {
-    // leftIndex++;
-    // } else {
-    // T temp = array[rightIndex];
-
-    // // Shift elements from leftIndex to right by one position
-    // for (int i = rightIndex - 1; i >= leftIndex; i--) {
-    // array[i + 1] = array[i];
-    // }
-
-    // array[leftIndex] = temp;
-
-    // leftIndex++;
-    // mid++;
-    // rightIndex++;
-    // }
-    // }
-    // }
-
     public void mergeSortRecursive(T[] array) {
         mergedArray = Arrays.copyOf(array, array.length);
         mergeSortRecursive(array, 0, array.length - 1);
