@@ -5,59 +5,6 @@ public class Sort<T extends Comparable<T>> {
 
     private T[] mergedArray; // Temporary array for merging - used in mergeSort
 
-    // /**
-    // * Sorts the given array using the QuickSort algorithm.
-    // *
-    // * @param array the array to be sorted
-    // */
-    // public void quickSort(T[] array) {
-    // quickSortLec(array, 0, array.length - 1);
-    // }
-
-    // /**
-    // * Recursively sorts the subarray within the specified range using the
-    // QuickSort
-    // * algorithm.
-    // *
-    // * @param array the array to be sorted
-    // * @param low the starting index of the subarray
-    // * @param high the ending index of the subarray
-    // */
-    // private void quickSortLec(T[] array, int low, int high) {
-    // if (low < high) {
-    // if (high - low >= 2) {
-    // int pivot = partitionLec(array, low, high);
-    // quickSortLec(array, low, pivot - 1);
-    // quickSortLec(array, pivot + 1, high);
-    // } else {
-    // insertionSort(array, low, high);
-    // }
-    // }
-    // }
-
-    // private int partitionLec(T[] array, int low, int high) {
-    // T pivot = array[high];
-    // int j = high;
-    // int i = low;
-
-    // while (true) {
-    // do {
-    // j--;
-    // } while (j >= low && array[j].compareTo(pivot) > 0);
-
-    // do {
-    // i++;
-    // } while (i <= high && array[i].compareTo(pivot) <= 0);
-
-    // if (i < j) {
-    // swap(array, i, j);
-    // } else {
-    // swap(array, j + 1, high);
-    // return j + 1;
-    // }
-    // }
-    // }
-
     /**
      * Sorts the given array using the QuickSort algorithm.
      *
