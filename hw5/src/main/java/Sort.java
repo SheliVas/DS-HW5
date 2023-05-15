@@ -5,13 +5,66 @@ public class Sort<T extends Comparable<T>> {
 
     private T[] mergedArray; // Temporary array for merging - used in mergeSort
 
+    // /**
+    // * Sorts the given array using the QuickSort algorithm.
+    // *
+    // * @param array the array to be sorted
+    // */
+    // public void quickSort(T[] array) {
+    // quickSortLec(array, 0, array.length - 1);
+    // }
+
+    // /**
+    // * Recursively sorts the subarray within the specified range using the
+    // QuickSort
+    // * algorithm.
+    // *
+    // * @param array the array to be sorted
+    // * @param low the starting index of the subarray
+    // * @param high the ending index of the subarray
+    // */
+    // private void quickSortLec(T[] array, int low, int high) {
+    // if (low < high) {
+    // if (high - low >= 2) {
+    // int pivot = partitionLec(array, low, high);
+    // quickSortLec(array, low, pivot - 1);
+    // quickSortLec(array, pivot + 1, high);
+    // } else {
+    // insertionSort(array, low, high);
+    // }
+    // }
+    // }
+
+    // private int partitionLec(T[] array, int low, int high) {
+    // T pivot = array[high];
+    // int j = high;
+    // int i = low;
+
+    // while (true) {
+    // do {
+    // j--;
+    // } while (j >= low && array[j].compareTo(pivot) > 0);
+
+    // do {
+    // i++;
+    // } while (i <= high && array[i].compareTo(pivot) <= 0);
+
+    // if (i < j) {
+    // swap(array, i, j);
+    // } else {
+    // swap(array, j + 1, high);
+    // return j + 1;
+    // }
+    // }
+    // }
+
     /**
      * Sorts the given array using the QuickSort algorithm.
      *
      * @param array the array to be sorted
      */
     public void quickSort(T[] array) {
-        quickSort(array, 0, array.length - 1);
+        quickSortLec(array, 0, array.length - 1);
     }
 
     /**
@@ -22,15 +75,40 @@ public class Sort<T extends Comparable<T>> {
      * @param low   the starting index of the subarray
      * @param high  the ending index of the subarray
      */
-    private void quickSort(T[] array, int low, int high) {
-        if (high > low) {
-            int pivot = partition(array, low, high);
-            quickSort(array, low, pivot - 1);
-            quickSort(array, pivot + 1, high);
+    private void quickSortLec(T[] array, int low, int high) {
+        if (high - low > 2) {
+            int pivot = partitionLec(array, low, high);
+            quickSortLec(array, low, pivot - 1);
+            quickSortLec(array, pivot + 1, high);
         } else {
             insertionSort(array, low, high);
         }
     }
+    
+    private int partitionLec(T[] array, int low, int high) {
+        T pivot = array[high];
+        int j = high;
+        int i = low - 1;
+    
+        while (true) {
+            do {
+                j--;
+            } while (j >= low && array[j].compareTo(pivot) > 0);
+    
+            do {
+                i++;
+            } while (i <= high && array[i].compareTo(pivot) <= 0);
+    
+            if (i < j) {
+                swap(array, i, j);
+            } else {
+                swap(array, j + 1, high);
+                return j + 1;
+            }
+        }
+    }
+    
+    
 
     /**
      * Sorts the given array using the QuickSort algorithm based on the recitation
@@ -39,9 +117,30 @@ public class Sort<T extends Comparable<T>> {
      * @param array the array to be sorted
      */
     public void quickSortRecitation(T[] array) {
-        // Implementation goes here
+        quickSortRec(array, 0, array.length - 1);
     }
 
+    /**
+     * Recursively sorts the subarray within the specified range using the QuickSort
+     * algorithm.
+     *
+     * @param array the array to be sorted
+     * @param low   the starting index of the subarray
+     * @param high  the ending index of the subarray
+     */
+    private void quickSortRec(T[] array, int low, int high) {
+        if (low < high) {
+            if (high - low >= 2) {
+                int pivot = partitionRec(array, low, high);
+                quickSortRec(array, low, pivot - 1);
+                quickSortRec(array, pivot + 1, high);
+            } else {
+                insertionSort(array, low, high);
+            }
+        }
+    }
+
+    // this is the recitation version!
     /**
      * Partitions the array around a pivot element for the QuickSort algorithm.
      *
@@ -50,7 +149,7 @@ public class Sort<T extends Comparable<T>> {
      * @param high  the ending index of the partition
      * @return the pivot index
      */
-    private int partition(T[] array, int low, int high) {
+    private int partitionRec(T[] array, int low, int high) {
         T pivot = array[high];
         int i = low - 1;
         for (int j = low; j <= high - 1; j++) {
@@ -258,8 +357,8 @@ public class Sort<T extends Comparable<T>> {
         // Expected output: [1, 2, 3, 4, 5, 6, 7, 8, 9]
     }
 
-    // quickSort test
-    public static void testQuickSort() {
+    // quickSortLec test
+    public static void testQuickSortLec() {
         // Test case 1: Empty array
         Integer[] array1 = {};
         Sort<Integer> sorter = new Sort<>();
@@ -300,6 +399,52 @@ public class Sort<T extends Comparable<T>> {
         Integer[] array6 = { 9, 2, 5, 1, 7, 4, 8, 3, 6 };
         System.out.println("Before sorting: " + Arrays.toString(array6));
         sorter.quickSort(array6);
+        System.out.println("After sorting: " + Arrays.toString(array6));
+        // Expected output: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    }
+
+    // quickSortRec test
+    public static void testQuickSortRec() {
+        // Test case 1: Empty array
+        Integer[] array1 = {};
+        Sort<Integer> sorter = new Sort<>();
+        System.out.println("Before sorting: " + Arrays.toString(array1));
+        sorter.quickSortRecitation(array1);
+        System.out.println("After sorting: " + Arrays.toString(array1));
+        // Expected output: []
+
+        // Test case 2: Array with a single element
+        Integer[] array2 = { 5 };
+        System.out.println("Before sorting: " + Arrays.toString(array2));
+        sorter.quickSortRecitation(array2);
+        System.out.println("After sorting: " + Arrays.toString(array2));
+        // Expected output: [5]
+
+        // Test case 3: Array with repeated elements
+        Integer[] array3 = { 5, 2, 9, 2, 7, 5 };
+        System.out.println("Before sorting: " + Arrays.toString(array3));
+        sorter.quickSortRecitation(array3);
+        System.out.println("After sorting: " + Arrays.toString(array3));
+        // Expected output: [2, 2, 5, 5, 7, 9]
+
+        // Test case 4: Array already sorted in descending order
+        Integer[] array4 = { 9, 7, 5, 3, 1 };
+        System.out.println("Before sorting: " + Arrays.toString(array4));
+        sorter.quickSortRecitation(array4);
+        System.out.println("After sorting: " + Arrays.toString(array4));
+        // Expected output: [1, 3, 5, 7, 9]
+
+        // Test case 5: Array with negative numbers
+        Integer[] array5 = { -5, 2, -9, 1, -7 };
+        System.out.println("Before sorting: " + Arrays.toString(array5));
+        sorter.quickSortRecitation(array5);
+        System.out.println("After sorting: " + Arrays.toString(array5));
+        // Expected output: [-9, -7, -5, 1, 2]
+
+        // Test case 6: Array with large number of elements
+        Integer[] array6 = { 9, 2, 5, 1, 7, 4, 8, 3, 6 };
+        System.out.println("Before sorting: " + Arrays.toString(array6));
+        sorter.quickSortRecitation(array6);
         System.out.println("After sorting: " + Arrays.toString(array6));
         // Expected output: [1, 2, 3, 4, 5, 6, 7, 8, 9]
     }
@@ -357,47 +502,46 @@ public class Sort<T extends Comparable<T>> {
         Sort<Integer> sorter = new Sort<>();
 
         // Test case 1: Array with random elements
-        Integer[] arr1 = {5, 2, 9, 1, 7};
+        Integer[] arr1 = { 5, 2, 9, 1, 7 };
         System.out.println("Before sorting: " + Arrays.toString(arr1));
         sorter.mergeSortIterative(arr1);
         System.out.println("After sorting: " + Arrays.toString(arr1));
         // Expected output: [1, 2, 5, 7, 9]
-    
+
         // Test case 2: Array with duplicate elements
-        Integer[] arr2 = {10, 4, 8, 3, 6, 4, 8};
+        Integer[] arr2 = { 10, 4, 8, 3, 6, 4, 8 };
         System.out.println("Before sorting: " + Arrays.toString(arr2));
         sorter.mergeSortIterative(arr2);
         System.out.println("After sorting: " + Arrays.toString(arr2));
         // Expected output: [3, 4, 4, 6, 8, 8, 10]
-    
+
         // Test case 3: Array with already sorted elements
-        Integer[] arr3 = {1, 2, 3, 4, 5};
+        Integer[] arr3 = { 1, 2, 3, 4, 5 };
         System.out.println("Before sorting: " + Arrays.toString(arr3));
         sorter.mergeSortIterative(arr3);
         System.out.println("After sorting: " + Arrays.toString(arr3));
         // Expected output: [1, 2, 3, 4, 5]
-    
+
         // Test case 4: Array with descending order elements
-        Integer[] arr4 = {9, 8, 7, 6, 5, 4, 3, 2, 1};
+        Integer[] arr4 = { 9, 8, 7, 6, 5, 4, 3, 2, 1 };
         System.out.println("Before sorting: " + Arrays.toString(arr4));
         sorter.mergeSortIterative(arr4);
         System.out.println("After sorting: " + Arrays.toString(arr4));
         // Expected output: [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    
+
         // Test case 5: Empty array
         Integer[] arr5 = {};
         System.out.println("Before sorting: " + Arrays.toString(arr5));
         sorter.mergeSortIterative(arr5);
         System.out.println("After sorting: " + Arrays.toString(arr5));
         // Expected output: []
-    
+
         // Test case 6: Array with a single element
-        Integer[] arr6 = {1};
+        Integer[] arr6 = { 1 };
         System.out.println("Before sorting: " + Arrays.toString(arr6));
         sorter.mergeSortIterative(arr6);
         System.out.println("After sorting: " + Arrays.toString(arr6));
         // Expected output: [1]
     }
-    
 
 }
