@@ -23,6 +23,10 @@ public class Main {
         System.out.println("Testing iterative MergeSort:");
         Sort.testIterativeMergeSort();
         System.out.println();
+       
+        System.out.println("Testing countingSort:");
+        Sort.testCountingSort();
+        System.out.println();
 
        
     }

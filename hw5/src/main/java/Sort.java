@@ -31,21 +31,21 @@ public class Sort<T extends Comparable<T>> {
             insertionSort(array, low, high);
         }
     }
-    
+
     private int partitionLec(T[] array, int low, int high) {
         T pivot = array[high];
         int j = high;
         int i = low - 1;
-    
+
         while (true) {
             do {
                 j--;
             } while (j >= low && array[j].compareTo(pivot) > 0);
-    
+
             do {
                 i++;
             } while (i <= high && array[i].compareTo(pivot) <= 0);
-    
+
             if (i < j) {
                 swap(array, i, j);
             } else {
@@ -54,8 +54,6 @@ public class Sort<T extends Comparable<T>> {
             }
         }
     }
-    
-    
 
     /**
      * Sorts the given array using the QuickSort algorithm based on the recitation
@@ -255,14 +253,58 @@ public class Sort<T extends Comparable<T>> {
         // Implementation goes here
     }
 
+    // counting sort
+    /**
+     * Sorts the given array using the counting sort algorithm.
+     *
+     * @param array the array to be sorted
+     * @param k     the range of elements in the array (max - min + 1)
+     */
+    public void countingSort(int[] array, int k) {
+        int n = array.length;
+        // If the array has 0 or 1 element, it is already sorted
+        if (n <= 1) {
+            return;
+        }
+        // Find the minimum and maximum values in the array
+        int min = array[0];
+        int max = array[0];
+        for (int i = 1; i < n; i++) {
+            if (array[i] < min) {
+                min = array[i];
+            } else if (array[i] > max) {
+                max = array[i];
+            }
+        }
+         // Calculate the range of values (for handeling negative and non standard values)
+        int range = max - min + 1;
+        int[] count = new int[range];
+        int[] output = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            count[array[i] - min]++;
+        }
+
+        for (int i = 1; i < range; i++) {
+            count[i] += count[i - 1];
+        }
+
+        for (int i = n - 1; i >= 0; i--) {
+            output[count[array[i] - min] - 1] = array[i];
+            count[array[i] - min]--;
+        }
+
+        System.arraycopy(output, 0, array, 0, n);
+    }
+
     // --------------------------------- TESTING SECTION
     // ----------------------------------------------------------------
 
     // Insertion Sort Test
     public static void testInsertionSort() {
+        Sort<Integer> sorter = new Sort<>();
         // Test case 1: Empty array
         Integer[] array1 = {};
-        Sort<Integer> sorter = new Sort<>();
         System.out.println("Before sorting: " + Arrays.toString(array1));
         sorter.insertionSort(array1, 0, array1.length - 1);
         System.out.println("After sorting: " + Arrays.toString(array1));
@@ -306,9 +348,9 @@ public class Sort<T extends Comparable<T>> {
 
     // quickSortLec test
     public static void testQuickSortLec() {
+        Sort<Integer> sorter = new Sort<>();
         // Test case 1: Empty array
         Integer[] array1 = {};
-        Sort<Integer> sorter = new Sort<>();
         System.out.println("Before sorting: " + Arrays.toString(array1));
         sorter.quickSort(array1);
         System.out.println("After sorting: " + Arrays.toString(array1));
@@ -352,9 +394,9 @@ public class Sort<T extends Comparable<T>> {
 
     // quickSortRec test
     public static void testQuickSortRec() {
+        Sort<Integer> sorter = new Sort<>();
         // Test case 1: Empty array
         Integer[] array1 = {};
-        Sort<Integer> sorter = new Sort<>();
         System.out.println("Before sorting: " + Arrays.toString(array1));
         sorter.quickSortRecitation(array1);
         System.out.println("After sorting: " + Arrays.toString(array1));
@@ -489,6 +531,45 @@ public class Sort<T extends Comparable<T>> {
         sorter.mergeSortIterative(arr6);
         System.out.println("After sorting: " + Arrays.toString(arr6));
         // Expected output: [1]
+    }
+
+    // test counting sort
+    public static void testCountingSort() {
+        // Test case 1: Empty array
+        int[] array1 = {};
+        Sort<Integer> sorter = new Sort<>();
+        System.out.println("Before sorting: " + Arrays.toString(array1));
+        sorter.countingSort(array1, 0);
+        System.out.println("After sorting: " + Arrays.toString(array1));
+        // Expected output: []
+
+        // Test case 2: Array with a single element
+        int[] array2 = { 5 };
+        System.out.println("Before sorting: " + Arrays.toString(array2));
+        sorter.countingSort(array2, 5);
+        System.out.println("After sorting: " + Arrays.toString(array2));
+        // Expected output: [5]
+
+        // Test case 3: Array with repeated elements
+        int[] array3 = { 3, 1, 2, 2, 1, 3 };
+        System.out.println("Before sorting: " + Arrays.toString(array3));
+        sorter.countingSort(array3, 3);
+        System.out.println("After sorting: " + Arrays.toString(array3));
+        // Expected output: [1, 1, 2, 2, 3, 3]
+
+        // Test case 4: Array with all elements equal
+        int[] array4 = { 5, 5, 5, 5, 5 };
+        System.out.println("Before sorting: " + Arrays.toString(array4));
+        sorter.countingSort(array4, 5);
+        System.out.println("After sorting: " + Arrays.toString(array4));
+        // Expected output: [5, 5, 5, 5, 5]
+
+        // Test case 5: Array with negative elements
+        int[] array5 = { -5, -2, -9, -1, -7 };
+        System.out.println("Before sorting: " + Arrays.toString(array5));
+        sorter.countingSort(array5, 0);
+        System.out.println("After sorting: " + Arrays.toString(array5));
+        // Expected output: [-9, -7, -5, -2, -1]
     }
 
 }
