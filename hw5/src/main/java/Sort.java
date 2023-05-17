@@ -40,6 +40,14 @@ public class Sort<T extends Comparable<T>> {
         }
     }
 
+    /**
+     * Partitions the array around a pivot element for the QuickSort algorithm.
+     *
+     * @param array the array to be partitioned
+     * @param low   the starting index of the partition
+     * @param high  the ending index of the partition
+     * @return the pivot index
+     */
     private int partitionLec(T[] array, int low, int high) {
         T pivot = array[high];
         int j = high;
@@ -117,6 +125,12 @@ public class Sort<T extends Comparable<T>> {
     // ----------------------------------------------
     // MergeSort----------------------------------
 
+    /**
+     * Sorts the array using the Merge Sort algorithm in a recursive manner.
+     * This method creates a temporary array to assist in the sorting process.
+     *
+     * @param array the array to be sorted
+     */
     public void mergeSortRecursive(T[] array) {
         int n = array.length;
         T[] tempArray = (T[]) new Comparable[n];
@@ -124,6 +138,15 @@ public class Sort<T extends Comparable<T>> {
         mergeSortRecursive(array, tempArray, 0, array.length - 1);
     }
 
+    /**
+     * Recursively performs the Merge Sort algorithm on a subarray.
+     * This method uses a temporary array for merging sorted subarrays.
+     *
+     * @param array     the array to be sorted
+     * @param tempArray the temporary array used for merging
+     * @param low       the starting index of the subarray
+     * @param high      the ending index of the subarray
+     */
     private void mergeSortRecursive(T[] array, T[] tempArray, int low, int high) {
         if (high - low <= naiveSortThreshold) {
             insertionSort(array, low, high);
@@ -139,6 +162,12 @@ public class Sort<T extends Comparable<T>> {
         }
     }
 
+    /**
+     * Sorts the array using the Merge Sort algorithm in an iterative manner.
+     * This method creates a temporary array to assist in the sorting process.
+     *
+     * @param array the array to be sorted
+     */
     public void mergeSortIterative(T[] array) {
         int n = array.length;
         T[] tempArray = (T[]) new Comparable[n];
@@ -169,6 +198,17 @@ public class Sort<T extends Comparable<T>> {
         }
     }
 
+    /**
+     * Merges two sorted subarrays into a single sorted subarray.
+     * This method is used by the Merge Sort algorithm.
+     *
+     * @param array     the array containing the subarrays to be merged
+     * @param tempArray the temporary array used for merging
+     * @param low       the starting index of the first subarray
+     * @param mid       the ending index of the first subarray and the starting
+     *                  index of the second subarray
+     * @param high      the ending index of the second subarray
+     */
     private void merge(T[] array, T[] tempArray, int low, int mid, int high) {
         int leftIndex = low;
         int rightIndex = mid + 1;
@@ -209,7 +249,7 @@ public class Sort<T extends Comparable<T>> {
 
         // Apply counting sort for each digit
         for (int exp = 1; max / exp > 0; exp *= base) {
-            countingSort(array, exp);
+            countingSort(array, exp, base);
         }
     }
 
@@ -219,36 +259,27 @@ public class Sort<T extends Comparable<T>> {
      * @param array the array to be sorted
      * @param exp   the exponent value indicating the current digit being considered
      */
-    private static void countingSort(int[] array, int exp) {
+    private static void countingSort(int[] array, int exp, int base) {
         int n = array.length;
-        int min = array[0];
-        int max = array[0];
-
-        // Find the minimum and maximum values in the array
-        for (int i = 1; i < n; i++) {
-            if (array[i] < min) {
-                min = array[i];
-            } else if (array[i] > max) {
-                max = array[i];
-            }
-        }
-
-        // Calculate the range of values
-        int range = max - min + 1;
-        int[] count = new int[range];
+        int[] count = new int[base];
         int[] output = new int[n];
 
+        // Count the occurrences of each digit (0 to base-1) at the current digit
+        // position
         for (int i = 0; i < n; i++) {
-            count[array[i] - min]++;
+            int digit = ((array[i] / exp) % base + base) % base; // Adjust the digit calculation for negative numbers
+            count[digit]++;
         }
 
-        for (int i = 1; i < range; i++) {
+        // Calculate the cumulative count
+        for (int i = 1; i < base; i++) {
             count[i] += count[i - 1];
         }
 
+        // Build the output array by placing elements in their sorted positions
         for (int i = n - 1; i >= 0; i--) {
-            output[count[array[i] - min] - 1] = array[i];
-            count[array[i] - min]--;
+            int digit = ((array[i] / exp) % base + base) % base; // Adjust the digit calculation for negative numbers
+            output[--count[digit]] = array[i];
         }
 
         arrayCopy(output, 0, array, 0, n);
@@ -289,33 +320,53 @@ public class Sort<T extends Comparable<T>> {
     }
 
     /**
-     * Finds the maximum value in the given array.
+     * Returns the maximum absolute value in the given array.
+     * If the array is empty, it returns 0.
      *
-     * @param array the array to find the maximum value from
-     * @return the maximum value in the array, or Integer.MIN_VALUE if the array is
-     *         empty
+     * @param array the array to find the maximum absolute value from
+     * @return the maximum absolute value in the array
      */
     private static int getMax(int[] array) {
         if (array.length == 0) {
-            return Integer.MIN_VALUE;
+            return 0;
         }
 
-        int max = array[0];
+        int max = Math.abs(array[0]);
         for (int i = 1; i < array.length; i++) {
-            if (array[i] > max) {
-                max = array[i];
+            int absValue = Math.abs(array[i]);
+            if (absValue > max) {
+                max = absValue;
             }
         }
         return max;
     }
 
+    /**
+     * Copies elements from the source array to the destination array.
+     *
+     * @param src     the source array to copy elements from
+     * @param srcPos  the starting position in the source array
+     * @param dest    the destination array to copy elements to
+     * @param destPos the starting position in the destination array
+     * @param length  the number of elements to be copied
+     * @param <T>     the type of elements in the arrays
+     */
     public static <T> void arrayCopy(T[] src, int srcPos, T[] dest, int destPos, int length) {
         for (int i = 0; i < length; i++) {
             dest[destPos + i] = src[srcPos + i];
         }
     }
 
-    // arrayCopy for RadixSort
+    /**
+     * Copies elements from the source array to the destination array.
+     * This method is specifically designed for copying integer elements.
+     *
+     * @param src     the source array to copy elements from
+     * @param srcPos  the starting position in the source array
+     * @param dest    the destination array to copy elements to
+     * @param destPos the starting position in the destination array
+     * @param length  the number of elements to be copied
+     */
     public static void arrayCopy(int[] src, int srcPos, int[] dest, int destPos, int length) {
         for (int i = 0; i < length; i++) {
             dest[destPos + i] = src[srcPos + i];
