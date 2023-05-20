@@ -1,0 +1,75 @@
+Experiment 1: Random Inputs
+---------------------------
+Results for input size: 10000
+---------------------------
+Algorithm: Arrays.sort
+Average: 3.63
+Standard Deviation: 5.296517723939001
+---------------------------
+Algorithm: Quick Sort (Class)
+Average: 2.95
+Standard Deviation: 5.639813826714496
+---------------------------
+Algorithm: Quick Sort (Recitation)
+Average: 1.32
+Standard Deviation: 3.334306524601483
+---------------------------
+Algorithm: Merge Sort (Recursive)
+Average: 1.43
+Standard Deviation: 3.3801035487097186
+---------------------------
+Algorithm: Merge Sort (Iterative)
+Average: 2.39
+Standard Deviation: 4.197368223065492
+---------------------------
+Algorithm: Radix Sort
+Average: 1.31
+Standard Deviation: 3.545969543016413
+---------------------------
+Results for input size: 50000
+---------------------------
+Algorithm: Arrays.sort
+Average: 8.29
+Standard Deviation: 5.870766559828452
+---------------------------
+Algorithm: Quick Sort (Class)
+Average: 5.48
+Standard Deviation: 5.470795189001321
+---------------------------
+Algorithm: Quick Sort (Recitation)
+Average: 8.07
+Standard Deviation: 5.805609356475852
+---------------------------
+Algorithm: Merge Sort (Recursive)
+Average: 10.47
+Standard Deviation: 5.989081732619781
+---------------------------
+Algorithm: Merge Sort (Iterative)
+Average: 12.06
+Standard Deviation: 5.740766499344841
+---------------------------
+Algorithm: Radix Sort
+Average: 6.05
+Standard Deviation: 5.73301840220315
+---------------------------
+Results for input size: 100000
+---------------------------
+Algorithm: Arrays.sort
+Average: 18.31
+Standard Deviation: 4.433271929399322
+---------------------------
+Algorithm: Quick Sort (Class)
+Average: 13.12
+Standard Deviation: 5.972068318430392
+---------------------------
+Algorithm: Quick Sort (Recitation)
+Average: 15.48
+Standard Deviation: 3.85611203156755
+---------------------------
+Algorithm: Merge Sort (Recursive)
+Average: 21.35
+Standard Deviation: 5.855552920092174
+---------------------------
+Algorithm: Merge Sort (Iterative)
+Average: 23.87
+Stand
